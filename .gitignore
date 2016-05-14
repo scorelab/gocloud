@@ -3,6 +3,10 @@
 *.a
 *.so
 
+.idea
+Godeps
+vendor
+
 # Folders
 _obj
 _test
