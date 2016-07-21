@@ -4,7 +4,7 @@ import (
 	"crypto/hmac"
 	"crypto/sha256"
 	"encoding/base64"
-	"github.com/scorelab/gocloud/lib/internal/aws"
+	"github.com/scorelab/gocloud/lib/common/aws"
 	"sort"
 	"strings"
 )

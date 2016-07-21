@@ -7,7 +7,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"time"
-	"github.com/scorelab/gocloud/lib/internal/aws"
+	"github.com/scorelab/gocloud/lib/common/aws"
 )
 
 const debug = false
