@@ -115,14 +115,3 @@ func multimap(p map[string]string) url.Values {
 	return q
 }
 
-
-
-
-// ResponseMetadata
-type ResponseMetadata struct {
-	RequestId string // A unique ID for tracking the request
-}
-
-type BaseResponse struct {
-	ResponseMetadata ResponseMetadata
-}
