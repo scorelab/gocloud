@@ -2,8 +2,6 @@ package ec2
 
 import (
 	"strconv"
-	"encoding/hex"
-	"crypto/rand"
 )
 
 // RunInstances starts new instances in EC2.
@@ -40,15 +38,6 @@ func (ec2 *EC2) RunInstances(options *RunInstancesOptions) (resp *RunInstancesRe
 	return
 }
 
-func clientToken() (string, error) {
-	// Maximum EC2 client token size is 64 bytes.
-	buf := make([]byte, 32)
-	_, err := rand.Read(buf)
-	if err != nil {
-		return "", err
-	}
-	return hex.EncodeToString(buf), nil
-}
 
 
 

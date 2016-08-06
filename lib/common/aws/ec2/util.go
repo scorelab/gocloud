@@ -5,6 +5,8 @@ import (
 	"net/url"
 	"net/http"
 	"encoding/xml"
+	"encoding/hex"
+	"crypto/rand"
 )
 
 func multimap(p map[string]string) url.Values {
@@ -31,6 +33,23 @@ func buildError(r *http.Response) error {
 }
 
 func makeParams(action string) map[string]string {
+	params := make(map[string]string)
+	params["Action"] = action
+	return params
+}
+
+func clientToken() (string, error) {
+	// Maximum EC2 client token size is 64 bytes.
+	buf := make([]byte, 32)
+	_, err := rand.Read(buf)
+	if err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(buf), nil
+}
+
+// Create a base set of params for an action
+func MakeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
 	return params
