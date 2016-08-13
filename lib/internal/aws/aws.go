@@ -19,12 +19,6 @@ type ServiceInfo struct {
 	Signer   uint
 }
 
-// Create a base set of params for an action
-func MakeParams(action string) map[string]string {
-	params := make(map[string]string)
-	params["Action"] = action
-	return params
-}
 
 // Create a new AWS server to handle making requests
 func NewService(auth Auth, service ServiceInfo) (s *Service, err error) {
@@ -115,14 +109,3 @@ func multimap(p map[string]string) url.Values {
 	return q
 }
 
-
-
-
-// ResponseMetadata
-type ResponseMetadata struct {
-	RequestId string // A unique ID for tracking the request
-}
-
-type BaseResponse struct {
-	ResponseMetadata ResponseMetadata
-}

@@ -7,7 +7,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"time"
-	"github.com/scorelab/gocloud/lib/internal/aws"
+	"github.com/scorelab/gocloud/lib/common/aws"
 )
 
 const debug = false
@@ -39,7 +39,6 @@ func (ec2 *EC2) query(params map[string]string, resp interface{}) error {
 	if endpoint.Path == "" {
 		endpoint.Path = "/"
 	}
-	sign(ec2.Auth, "GET", endpoint.Path, params, endpoint.Host)
 	endpoint.RawQuery = multimap(params).Encode()
 	if debug {
 		log.Printf("get { %v } -> {\n", endpoint.String())
@@ -62,32 +61,4 @@ func (ec2 *EC2) query(params map[string]string, resp interface{}) error {
 	return err
 }
 
-func multimap(p map[string]string) url.Values {
-	q := make(url.Values, len(p))
-	for k, v := range p {
-		q[k] = []string{v}
-	}
-	return q
-}
-
-func buildError(r *http.Response) error {
-	errors := xmlErrors{}
-	xml.NewDecoder(r.Body).Decode(&errors)
-	var err Error
-	if len(errors.Errors) > 0 {
-		err = errors.Errors[0]
-	}
-	err.RequestId = errors.RequestId
-	err.StatusCode = r.StatusCode
-	if err.Message == "" {
-		err.Message = r.Status
-	}
-	return &err
-}
-
-func makeParams(action string) map[string]string {
-	params := make(map[string]string)
-	params["Action"] = action
-	return params
-}
 
