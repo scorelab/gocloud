@@ -4,8 +4,7 @@ import (
 	"strconv"
 )
 
-// RunInstances starts new instances in EC2.
-func (ec2 *EC2) RunInstances(options *RunInstancesOptions) (resp *RunInstancesResp, err error) {
+func (ec2 *EC2) CreateInstances(options *CreateInstancesOptions) (resp *CreateInstancesResp, err error) {
 	params := makeParams("RunInstances")
 	params["ImageId"] = options.ImageId
 	params["InstanceType"] = options.InstanceType
@@ -30,13 +29,14 @@ func (ec2 *EC2) RunInstances(options *RunInstancesOptions) (resp *RunInstancesRe
 	if options.KeyName != "" {
 		params["KeyName"] = options.KeyName
 	}
-	resp = &RunInstancesResp{}
+	resp = &CreateInstancesResp{}
 	err = ec2.query(params, resp)
 	if err != nil {
 		return nil, err
 	}
 	return
 }
+
 
 
 

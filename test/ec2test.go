@@ -11,11 +11,11 @@ func main() {
 		panic(err.Error())
 	}
 	e := ec2.New(auth, aws.USEast)
-	options := ec2.RunInstancesOptions{
-		ImageId:      "ami-ccf405a5", // Ubuntu Maverick, i386, EBS store
+	options := ec2.CreateInstancesOptions{
+		ImageId:      "ami-ccf405a5",
 		InstanceType: "t1.micro",
 	}
-	resp, err := e.RunInstances(&options)
+	resp, err := e.CreateInstances(&options)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -25,7 +25,3 @@ func main() {
 	}
 }
 
-func createInstance() {
-
-	//return resp.Instances
-}

@@ -1,6 +1,6 @@
 package ec2
 
-type RunInstancesOptions struct {
+type CreateInstancesOptions struct {
 	ImageId          string
 	MinCount         int
 	MaxCount         int
@@ -9,8 +9,8 @@ type RunInstancesOptions struct {
 	AvailabilityZone string
 }
 
-// Response to a RunInstances request.
-type RunInstancesResp struct {
+
+type CreateInstancesResp struct {
 	RequestId      string          `xml:"requestId"`
 	ReservationId  string          `xml:"reservationId"`
 	OwnerId        string          `xml:"ownerId"`
