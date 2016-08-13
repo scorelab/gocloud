@@ -24,6 +24,13 @@ type Auth struct {
 var unreserved = make([]bool, 128)
 var hex = "0123456789ABCDEF"
 var b64 = base64.StdEncoding
+func init() {
+	// RFC3986
+	u := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_.~"
+	for _, c := range u {
+		unreserved[c] = true
+	}
+}
 
 
 type credentials struct {
