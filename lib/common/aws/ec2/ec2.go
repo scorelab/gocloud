@@ -17,14 +17,17 @@ type EC2 struct {
 	aws.Region
 	httpClient *http.Client
 	private    byte
+	aws.Service
 }
 
-func NewWithClient(auth aws.Auth, region aws.Region, client *http.Client) *EC2 {
-	return &EC2{auth, region, client, 0}
-}
 
 func New(auth aws.Auth, region aws.Region) *EC2 {
 	return NewWithClient(auth, region, aws.RetryingClient)
+}
+
+func NewWithClient(auth aws.Auth, region aws.Region, client *http.Client) *EC2 {
+	s,_ :=aws.NewService(auth,aws.ServiceInfo{region.EC2Endpoint,0})
+	return &EC2{auth, region, client, 0, *s} //check 0
 }
 
 var timeNow = time.Now
