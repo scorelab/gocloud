@@ -30,23 +30,9 @@ func NewWithClient(auth aws.Auth, region aws.Region, client *http.Client) *EC2 {
 	return &EC2{auth, region, client, 0, *s} //check 0
 }
 
-var timeNow = time.Now
 
 func (ec2 *EC2) query(params map[string]string, resp interface{}) error {
-	params["Version"] = "2014-02-01"
-	params["Timestamp"] = timeNow().In(time.UTC).Format(time.RFC3339)
-	endpoint, err := url.Parse(ec2.Region.EC2Endpoint)
-	if err != nil {
-		return err
-	}
-	if endpoint.Path == "" {
-		endpoint.Path = "/"
-	}
-	endpoint.RawQuery = multimap(params).Encode()
-	if debug {
-		log.Printf("get { %v } -> {\n", endpoint.String())
-	}
-	r, err := ec2.httpClient.Get(endpoint.String())
+	r, err := ec2.Service.Query("GET","/",params);
 	if err != nil {
 		return err
 	}
@@ -63,5 +49,3 @@ func (ec2 *EC2) query(params map[string]string, resp interface{}) error {
 	err = xml.NewDecoder(r.Body).Decode(resp)
 	return err
 }
-
-
