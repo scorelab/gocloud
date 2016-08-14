@@ -1,26 +1,10 @@
 package ec2
 
-
 import (
-	"net/url"
 	"encoding/hex"
 	"crypto/rand"
+	"strconv"
 )
-
-func multimap(p map[string]string) url.Values {
-	q := make(url.Values, len(p))
-	for k, v := range p {
-		q[k] = []string{v}
-	}
-	return q
-}
-
-
-func makeParams(action string) map[string]string {
-	params := make(map[string]string)
-	params["Action"] = action
-	return params
-}
 
 func clientToken() (string, error) {
 	// Maximum EC2 client token size is 64 bytes.
@@ -32,8 +16,16 @@ func clientToken() (string, error) {
 	return hex.EncodeToString(buf), nil
 }
 
-// Create a base set of params for an action
-func MakeParams(action string) map[string]string {
+
+
+func addParamsList(params map[string]string, label string, ids []string) {
+	for i, id := range ids {
+		params[label+"."+strconv.Itoa(i+1)] = id
+	}
+}
+
+
+func makeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
 	return params

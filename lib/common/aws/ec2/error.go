@@ -42,4 +42,3 @@ type xmlErrors struct {
 	RequestId string  `xml:"RequestID"`
 	Errors    []Error `xml:"Errors>Error"`
 }
-

@@ -6,7 +6,8 @@ import (
 )
 
 func main() {
-	auth, err := aws.SharedAuth();
+
+	auth, err := aws.EnvAuth();
 	if err != nil {
 		panic(err.Error())
 	}

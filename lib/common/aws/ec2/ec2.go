@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"net/url"
-	"time"
 	"github.com/scorelab/gocloud/lib/common/aws"
 )
 
