@@ -46,6 +46,7 @@ type Service struct {
 }
 
 func (s *Service) Query(method, path string, params map[string]string) (resp *http.Response, err error) {
+	params["Version"] = "2014-02-01"
 	params["Timestamp"] = time.Now().UTC().Format(time.RFC3339)
 	u, err := url.Parse(s.service.Endpoint)
 	if err != nil {
