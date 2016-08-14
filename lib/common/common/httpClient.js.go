@@ -1,10 +1,10 @@
 package common
 
+
 import (
 	"net"
 	"net/http"
 	"time"
-	"math"
 )
 
 type RetryableFunc func(*http.Request, *http.Response, error) bool
@@ -38,28 +38,9 @@ func NewClient(rt *ResilientTransport) *http.Client {
 	}
 }
 
-var retryingTransport = &ResilientTransport{
-	Deadline: func() time.Time {
-		return time.Now().Add(5 * time.Second)
-	},
-	DialTimeout: 10 * time.Second,
-	MaxTries:    3,
-	ShouldRetry: func(*http.Request, *http.Response, error) bool { return true},
-	Wait:        ExpBackoff,
-}
-
-// Exported default client
-var RetryingClient = NewClient(retryingTransport)
-
 func (t *ResilientTransport) RoundTrip(req *http.Request) (*http.Response, error) {
 	return t.tries(req)
 }
-
-func ExpBackoff(try int) {
-	time.Sleep(100 * time.Millisecond *
-	time.Duration(math.Exp2(float64(try))))
-}
-
 
 func (t *ResilientTransport) tries(req *http.Request) (res *http.Response, err error) {
 	for try := 0; try < t.MaxTries; try += 1 {

@@ -20,27 +20,6 @@ type Auth struct {
 	expiration           time.Time
 }
 
-var unreserved = make([]bool, 128)
-var hex = "0123456789ABCDEF"
-var b64 = base64.StdEncoding
-func init() {
-	// RFC3986
-	u := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_.~"
-	for _, c := range u {
-		unreserved[c] = true
-	}
-}
-
-
-type credentials struct {
-	Code            string
-	LastUpdated     string
-	Type            string
-	AccessKeyId     string
-	SecretAccessKey string
-	Token           string
-	Expiration      string
-}
 
 func (a *Auth) Token() string {
 	if a.token == "" {
@@ -56,7 +35,7 @@ func (a *Auth) Expiration() time.Time {
 	return a.expiration
 }
 
-// To be used with other APIs that return auth credentials such as STS
+
 func NewAuth(accessKey, secretKey, token string, expiration time.Time) *Auth {
 	return &Auth{
 		AccessKey:  accessKey,
@@ -105,10 +84,21 @@ func EnvAuth() (auth Auth, err error) {
 
 
 
+// Defines the valid signers
+const (
+	V2Signature = iota
+)
 
-
-// Designates a signer interface suitable for signing AWS requests, params
-// should be appropriately encoded for the request before signing.
+var unreserved = make([]bool, 128)
+var hex = "0123456789ABCDEF"
+var b64 = base64.StdEncoding
+func init() {
+	// RFC3986
+	u := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_.~"
+	for _, c := range u {
+		unreserved[c] = true
+	}
+}
 type Signer interface {
 	Sign(method, path string, params map[string]string)
 }

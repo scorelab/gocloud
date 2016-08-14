@@ -8,10 +8,6 @@ import (
 	"time"
 )
 
-// Defines the valid signers
-const (
-	V2Signature = iota
-)
 
 // Defines the service endpoint and correct Signer implementation to use to sign requests for this endpoint
 type ServiceInfo struct {
@@ -20,7 +16,6 @@ type ServiceInfo struct {
 }
 
 
-// Create a new AWS server to handle making requests
 func NewService(auth Auth, service ServiceInfo) (s *Service, err error) {
 	var signer Signer
 	switch service.Signer {
@@ -38,8 +33,6 @@ func NewService(auth Auth, service ServiceInfo) (s *Service, err error) {
 
 
 
-// Implements a Server Query/Post API to easily query AWS services and build
-// errors when desired
 type Service struct {
 	service ServiceInfo
 	signer  Signer
@@ -79,28 +72,6 @@ func (s *Service) BuildError(r *http.Response) error {
 	return &err
 }
 
-
-
-
-
-type ErrorResponse struct {
-	Errors    Error  `xml:"Error"`
-	RequestId string // A unique ID for tracking the request
-}
-
-type Error struct {
-	StatusCode int
-	Type       string
-	Code       string
-	Message    string
-	RequestId  string
-}
-
-func (err *Error) Error() string {
-	return fmt.Sprintf("Type: %s, Code: %s, Message: %s",
-		err.Type, err.Code, err.Message,
-	)
-}
 
 func multimap(p map[string]string) url.Values {
 	q := make(url.Values, len(p))
