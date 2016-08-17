@@ -1,54 +1,54 @@
 package ec2
 
 type InstanceType struct {
-	Name		string
-	CPU		int
-	RAM		float32
-	Disk		string
-	Network		string
+	Name    string
+	CPU     int
+	RAM     float32
+	Disk    string
+	Network string
 }
 
 type instanceTypes struct {
-	T2_NANO          InstanceType
-	T2_MICRO         InstanceType
-	T2_SMALL         InstanceType
-	T2_MEDIUM        InstanceType
-	T2_LARGE         InstanceType
-	M4_LARGE         InstanceType
-	M4_XLARGE        InstanceType
-	M4_2XLARGE       InstanceType
-	M4_4XLARGE       InstanceType
-	M4_10XLARGE      InstanceType
-	M3_MEDIUM        InstanceType
-	M3_LARGE         InstanceType
-	M3_XLARGE        InstanceType
-	M3_2XLARGE       InstanceType
-	C4_LARGE         InstanceType
-	C4_XLARGE        InstanceType
-	C4_2XLARGE       InstanceType
-	C4_4XLARGE       InstanceType
-	C4_8XLARGE       InstanceType
-	C3_LARGE         InstanceType
-	C3_XLARGE        InstanceType
-	C3_2XLARGE       InstanceType
-	C3_4XLARGE       InstanceType
-	C3_8XLARGE       InstanceType
-	G2_2XLARGE       InstanceType
-	G2_8XLARGE       InstanceType
-	X1_32XLARGE      InstanceType
-	R3_LARGE         InstanceType
-	R3_XLARGE        InstanceType
-	R3_2XLARGE       InstanceType
-	R3_4XLARGE       InstanceType
-	R3_8XLARGE       InstanceType
-	I2_XLARGE        InstanceType
-	I2_2XLARGE       InstanceType
-	I2_4XLARGE       InstanceType
-	I2_8XLARGE       InstanceType
-	D2_XLARGE        InstanceType
-	D2_2XLARGE       InstanceType
-	D2_4XLARGE       InstanceType
-	D2_8XLARGE       InstanceType
+	T2_NANO     InstanceType
+	T2_MICRO    InstanceType
+	T2_SMALL    InstanceType
+	T2_MEDIUM   InstanceType
+	T2_LARGE    InstanceType
+	M4_LARGE    InstanceType
+	M4_XLARGE   InstanceType
+	M4_2XLARGE  InstanceType
+	M4_4XLARGE  InstanceType
+	M4_10XLARGE InstanceType
+	M3_MEDIUM   InstanceType
+	M3_LARGE    InstanceType
+	M3_XLARGE   InstanceType
+	M3_2XLARGE  InstanceType
+	C4_LARGE    InstanceType
+	C4_XLARGE   InstanceType
+	C4_2XLARGE  InstanceType
+	C4_4XLARGE  InstanceType
+	C4_8XLARGE  InstanceType
+	C3_LARGE    InstanceType
+	C3_XLARGE   InstanceType
+	C3_2XLARGE  InstanceType
+	C3_4XLARGE  InstanceType
+	C3_8XLARGE  InstanceType
+	G2_2XLARGE  InstanceType
+	G2_8XLARGE  InstanceType
+	X1_32XLARGE InstanceType
+	R3_LARGE    InstanceType
+	R3_XLARGE   InstanceType
+	R3_2XLARGE  InstanceType
+	R3_4XLARGE  InstanceType
+	R3_8XLARGE  InstanceType
+	I2_XLARGE   InstanceType
+	I2_2XLARGE  InstanceType
+	I2_4XLARGE  InstanceType
+	I2_8XLARGE  InstanceType
+	D2_XLARGE   InstanceType
+	D2_2XLARGE  InstanceType
+	D2_4XLARGE  InstanceType
+	D2_8XLARGE  InstanceType
 }
 
 var InstanceTypes = instanceTypes{
@@ -94,7 +94,6 @@ var InstanceTypes = instanceTypes{
 	InstanceType{"d2.8xlarge", 36, 244, "24 x 2000", "10 Gigabit"},
 }
 
-
 type CreateInstancesOptions struct {
 	ImageId          string
 	MinCount         int
@@ -103,7 +102,6 @@ type CreateInstancesOptions struct {
 	InstanceType     string
 	AvailabilityZone string
 }
-
 
 type CreateInstancesResp struct {
 	RequestId      string          `xml:"requestId"`
@@ -128,4 +126,36 @@ type Instance struct {
 	KeyName          string              `xml:"keyName"`
 	Monitoring       string              `xml:"monitoring>state"`
 	LaunchTime       string              `xml:"launchTime"`
+}
+
+type Image struct {
+	Id                 string               `xml:"imageId"`
+	Name               string               `xml:"name"`
+	Description        string               `xml:"description"`
+	Type               string               `xml:"imageType"`
+	State              string               `xml:"imageState"`
+	Location           string               `xml:"imageLocation"`
+	Public             bool                 `xml:"isPublic"`
+	Architecture       string               `xml:"architecture"`
+	Platform           string               `xml:"platform"`
+	ProductCodes       []string             `xml:"productCode>item>productCode"`
+	KernelId           string               `xml:"kernelId"`
+	RamdiskId          string               `xml:"ramdiskId"`
+	StateReason        string               `xml:"stateReason"`
+	OwnerId            string               `xml:"imageOwnerId"`
+	OwnerAlias         string               `xml:"imageOwnerAlias"`
+	RootDeviceType     string               `xml:"rootDeviceType"`
+	RootDeviceName     string               `xml:"rootDeviceName"`
+	VirtualizationType string               `xml:"virtualizationType"`
+	Hypervisor         string               `xml:"hypervisor"`
+}
+
+type ImagesResp struct {
+	RequestId string  `xml:"requestId"`
+	Images    []Image `xml:"imagesSet>item"`
+}
+
+type Tag struct {
+	Key   string `xml:"key"`
+	Value string `xml:"value"`
 }
