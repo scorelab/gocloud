@@ -1,5 +1,14 @@
 package ec2
 
+type InstanceType struct {
+	Name		string
+	CPU		int
+	RAM		float32
+	Disk		string
+	Network		string
+}
+
+
 type CreateInstancesOptions struct {
 	ImageId          string
 	MinCount         int
