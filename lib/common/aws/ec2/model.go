@@ -193,3 +193,8 @@ type StopInstanceResp struct {
 	RequestId    string                `xml:"requestId"`
 	StateChanges []InstanceStateChange `xml:"instancesSet>item"`
 }
+
+type TerminateInstancesResp struct {
+	RequestId    string                `xml:"requestId"`
+	StateChanges []InstanceStateChange `xml:"instancesSet>item"`
+}

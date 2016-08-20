@@ -71,4 +71,16 @@ func (ec2 *EC2) StopInstances(ids ...string) (resp *StopInstanceResp, err error)
 	return resp, nil
 }
 
+func (ec2 *EC2) TerminateInstances(instIds ... string) (resp *TerminateInstancesResp, err error) {
+	params := makeParams("TerminateInstances")
+	addParamsList(params, "InstanceId", instIds)
+	resp = &TerminateInstancesResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
+
 

@@ -59,3 +59,11 @@ func stopInstance(e * ec2.EC2){
 	}
 	fmt.Println(resp);
 }
+
+func terminateInstance(e * ec2.EC2){
+	resp, err := e.TerminateInstances("i-b0906521")
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(resp);
+}
