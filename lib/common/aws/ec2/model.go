@@ -1,5 +1,7 @@
 package ec2
 
+import "encoding/xml"
+
 type InstanceType struct {
 	Name    string
 	CPU     int
@@ -158,4 +160,9 @@ type ImagesResp struct {
 type Tag struct {
 	Key   string `xml:"key"`
 	Value string `xml:"value"`
+}
+
+type SimpleResp struct {
+	XMLName   xml.Name
+	RequestId string `xml:"requestId"`
 }

@@ -37,6 +37,17 @@ func (ec2 *EC2) CreateInstances(options *CreateInstancesOptions) (resp *CreateIn
 	return
 }
 
+func (ec2 *EC2) RebootInstance(ids ... string) (resp *SimpleResp, err error) {
+	params := makeParams("RebootInstances")
+	addParamsList(params, "InstanceId", ids)
+	resp = &SimpleResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
 
 
 

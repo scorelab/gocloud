@@ -7,6 +7,7 @@ import (
 	"encoding/xml"
 	"encoding/hex"
 	"crypto/rand"
+	"strconv"
 )
 
 func multimap(p map[string]string) url.Values {
@@ -60,4 +61,6 @@ func MakeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
 	return params
+
 }
+
