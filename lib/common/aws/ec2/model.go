@@ -166,3 +166,20 @@ type SimpleResp struct {
 	XMLName   xml.Name
 	RequestId string `xml:"requestId"`
 }
+
+
+type InstanceState struct {
+	Code int    `xml:"code"`
+	Name string `xml:"name"`
+}
+
+type InstanceStateChange struct {
+	InstanceId    string        `xml:"instanceId"`
+	CurrentState  InstanceState `xml:"currentState"`
+	PreviousState InstanceState `xml:"previousState"`
+}
+
+type InstanceStateReason struct {
+	Code    string `xml:"code"`
+	Message string `xml:"message"`
+}
