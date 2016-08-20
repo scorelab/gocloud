@@ -43,3 +43,11 @@ func rebootInstance(e *ec2.EC2){
 	}
 	fmt.Println(resp);
 }
+
+func startInstance(e * ec2.EC2){
+	resp, err := e.StartInstances("i-16b58d18")
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(resp);
+}
