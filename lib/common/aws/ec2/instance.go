@@ -60,8 +60,15 @@ func (ec2 *EC2) RebootInstance(ids ... string) (resp *SimpleResp, err error) {
 	return
 }
 
-
-
-
+func (ec2 *EC2) StopInstances(ids ...string) (resp *StopInstanceResp, err error) {
+	params := makeParams("StopInstances")
+	addParamsList(params, "InstanceId", ids)
+	resp = &StopInstanceResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
 
 

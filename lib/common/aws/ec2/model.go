@@ -188,3 +188,8 @@ type StartInstanceResp struct {
 	RequestId    string                `xml:"requestId"`
 	StateChanges []InstanceStateChange `xml:"instancesSet>item"`
 }
+
+type StopInstanceResp struct {
+	RequestId    string                `xml:"requestId"`
+	StateChanges []InstanceStateChange `xml:"instancesSet>item"`
+}

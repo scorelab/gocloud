@@ -51,3 +51,11 @@ func startInstance(e * ec2.EC2){
 	}
 	fmt.Println(resp);
 }
+
+func stopInstance(e * ec2.EC2){
+	resp, err := e.StopInstances("i-0b53b39a")
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println(resp);
+}
