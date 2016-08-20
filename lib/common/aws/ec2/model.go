@@ -183,3 +183,8 @@ type InstanceStateReason struct {
 	Code    string `xml:"code"`
 	Message string `xml:"message"`
 }
+
+type StartInstanceResp struct {
+	RequestId    string                `xml:"requestId"`
+	StateChanges []InstanceStateChange `xml:"instancesSet>item"`
+}
