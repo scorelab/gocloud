@@ -39,5 +39,14 @@ func (ec2 *EC2) RunInstances(options *RunInstancesOptions) (resp *RunInstancesRe
 }
 
 
-
+func (ec2 *EC2) RebootInstances(ids ...string) (resp *SimpleResp, err error) {
+	params := makeParams("RebootInstances")
+	addParamsList(params, "InstanceId", ids)
+	resp = &SimpleResp{}
+	err = ec2.query(params, resp)
+	if err != nil {
+		return nil, err
+	}
+	return resp, nil
+}
 

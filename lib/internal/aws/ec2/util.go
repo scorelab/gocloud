@@ -17,6 +17,13 @@ func multimap(p map[string]string) url.Values {
 	return q
 }
 
+func addParamsList(params map[string]string, label string, ids []string) {
+	for i, id := range ids {
+		params[label+"."+strconv.Itoa(i+1)] = id
+	}
+}
+
+
 func buildError(r *http.Response) error {
 	errors := xmlErrors{}
 	xml.NewDecoder(r.Body).Decode(&errors)

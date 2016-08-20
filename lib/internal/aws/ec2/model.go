@@ -1,5 +1,7 @@
 package ec2
 
+import "encoding/xml"
+
 type RunInstancesOptions struct {
 	ImageId          string
 	MinCount         int
@@ -33,4 +35,9 @@ type Instance struct {
 	KeyName          string              `xml:"keyName"`
 	Monitoring       string              `xml:"monitoring>state"`
 	LaunchTime       string              `xml:"launchTime"`
+}
+
+type SimpleResp struct {
+	XMLName   xml.Name
+	RequestId string `xml:"requestId"`
 }
