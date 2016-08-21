@@ -12,7 +12,8 @@ func main() {
 	//startInstance(service)
 	//rebootInstance(service)
 	//stopInstance(service)
-	terminateInstance(service)
+	//terminateInstance(service)
+	listImages(service);
 
 }
 
@@ -71,4 +72,20 @@ func terminateInstance(e * ec2.EC2){
 		panic(err.Error())
 	}
 	fmt.Println(resp);
+}
+
+func listImages(e * ec2.EC2) {
+	var idList =[]string{"ami-0022c769"};
+	filter := ec2.NewFilter();
+	//filter.Add("architecture","i386")
+
+	resp, err := e.ListImages(idList,filter)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Println("Number of instances ",len(resp.Images));
+	for _, image := range resp.Images {
+		fmt.Printf("image id : %v  , type : %v\n", image.Id,image.Type)
+	}
+
 }
