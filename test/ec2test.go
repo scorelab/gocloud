@@ -8,7 +8,12 @@ import (
 
 func main() {
 	service := authorize();
-	createInstance(service)
+	//createInstance(service)
+	//startInstance(service)
+	//rebootInstance(service)
+	//stopInstance(service)
+	terminateInstance(service)
+
 }
 
 
