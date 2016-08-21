@@ -1,50 +1,11 @@
 package ec2
 
-
 import (
-	"net/url"
-	"net/http"
-	"encoding/xml"
 	"encoding/hex"
 	"crypto/rand"
 	"strconv"
+	"sort"
 )
-
-func multimap(p map[string]string) url.Values {
-	q := make(url.Values, len(p))
-	for k, v := range p {
-		q[k] = []string{v}
-	}
-	return q
-}
-
-func addParamsList(params map[string]string, label string, ids []string) {
-	for i, id := range ids {
-		params[label+"."+strconv.Itoa(i+1)] = id
-	}
-}
-
-
-func buildError(r *http.Response) error {
-	errors := xmlErrors{}
-	xml.NewDecoder(r.Body).Decode(&errors)
-	var err Error
-	if len(errors.Errors) > 0 {
-		err = errors.Errors[0]
-	}
-	err.RequestId = errors.RequestId
-	err.StatusCode = r.StatusCode
-	if err.Message == "" {
-		err.Message = r.Status
-	}
-	return &err
-}
-
-func makeParams(action string) map[string]string {
-	params := make(map[string]string)
-	params["Action"] = action
-	return params
-}
 
 func clientToken() (string, error) {
 	// Maximum EC2 client token size is 64 bytes.
@@ -56,11 +17,51 @@ func clientToken() (string, error) {
 	return hex.EncodeToString(buf), nil
 }
 
-// Create a base set of params for an action
-func MakeParams(action string) map[string]string {
+
+
+func addParamsList(params map[string]string, label string, ids []string) {
+	for i, id := range ids {
+		params[label+"."+strconv.Itoa(i+1)] = id
+	}
+}
+
+
+func makeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
 	return params
+}
 
+
+type Filter struct {
+	m map[string][]string
+}
+
+func NewFilter() *Filter {
+	return &Filter{make(map[string][]string)}
+}
+
+
+func (f *Filter) Add(name string, value ...string) {
+	f.m[name] = append(f.m[name], value...)
+}
+
+func (f *Filter) addParams(params map[string]string) {
+	if f != nil {
+		a := make([]string, len(f.m))
+		i := 0
+		for k := range f.m {
+			a[i] = k
+			i++
+		}
+		sort.StringSlice(a).Sort()
+		for i, k := range a {
+			prefix := "Filter." + strconv.Itoa(i+1)
+			params[prefix+".Name"] = k
+			for j, v := range f.m[k] {
+				params[prefix+".Value."+strconv.Itoa(j+1)] = v
+			}
+		}
+	}
 }
 

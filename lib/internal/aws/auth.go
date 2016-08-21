@@ -10,7 +10,6 @@ import (
 	"time"
 	"errors"
 	"os"
-	"github.com/vaughan0/go-ini"
 )
 
 
@@ -21,27 +20,13 @@ type Auth struct {
 	expiration           time.Time
 }
 
-var unreserved = make([]bool, 128)
-var hex = "0123456789ABCDEF"
-var b64 = base64.StdEncoding
-
-
-type credentials struct {
-	Code            string
-	LastUpdated     string
-	Type            string
-	AccessKeyId     string
-	SecretAccessKey string
-	Token           string
-	Expiration      string
-}
 
 func (a *Auth) Token() string {
 	if a.token == "" {
 		return ""
 	}
 	if time.Since(a.expiration) >= -30 * time.Second {
-		*a, _ = GetAuth("", "", "", time.Time{})
+		*a, _ = GetAuth("", "")
 	}
 	return a.token
 }
@@ -50,7 +35,7 @@ func (a *Auth) Expiration() time.Time {
 	return a.expiration
 }
 
-// To be used with other APIs that return auth credentials such as STS
+
 func NewAuth(accessKey, secretKey, token string, expiration time.Time) *Auth {
 	return &Auth{
 		AccessKey:  accessKey,
@@ -60,107 +45,60 @@ func NewAuth(accessKey, secretKey, token string, expiration time.Time) *Auth {
 	}
 }
 
+// GetAuth creates an Auth based on either passed in credentials, or environment information
+func GetAuth(accessKey string, secretKey string) (auth Auth, err error ) {
+	if( accessKey!= "" &&  secretKey !="") {
+		auth.AccessKey = accessKey
+		auth.SecretKey = secretKey
 
-
-
-// GetAuth creates an Auth based on either passed in credentials,
-// environment information
-func GetAuth(accessKey string, secretKey, token string, expiration time.Time) (auth Auth, err error) {
-	// First try passed in credentials
-	if accessKey != "" && secretKey != "" {
-		return Auth{accessKey, secretKey, token, expiration}, nil
 	}
-
-	// Next try to get auth from the shared credentials file
-	auth, err = SharedAuth()
-	if err == nil {
-		// Found auth, return
-		return
-	}
-
-	// Next try to get auth from the environment
 	auth, err = EnvAuth()
 	if err == nil {
-		// Found auth, return
 		return
 	}
-
 	err = errors.New("No valid AWS authentication found")
 	return auth, err
 }
 
-// EnvAuth creates an Auth based on environment information.
 // The AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY environment variables are used.
 func EnvAuth() (auth Auth, err error) {
 	auth.AccessKey = os.Getenv("AWS_ACCESS_KEY_ID")
 	if auth.AccessKey == "" {
 		auth.AccessKey = os.Getenv("AWS_ACCESS_KEY")
 	}
+
 	auth.SecretKey = os.Getenv("AWS_SECRET_ACCESS_KEY")
 	if auth.SecretKey == "" {
 		auth.SecretKey = os.Getenv("AWS_SECRET_KEY")
 	}
+
 	if auth.AccessKey == "" {
 		err = errors.New("AWS_ACCESS_KEY_ID or AWS_ACCESS_KEY not found in environment")
 	}
 	if auth.SecretKey == "" {
 		err = errors.New("AWS_SECRET_ACCESS_KEY or AWS_SECRET_KEY not found in environment")
 	}
-
 	auth.token = os.Getenv("AWS_SESSION_TOKEN")
 	return
 }
 
-// SharedAuth creates an Auth based on shared credentials stored in $HOME/.aws/credentials.
-func SharedAuth() (auth Auth, err error) {
-	var profileName = os.Getenv("AWS_PROFILE")
 
-	if profileName == "" {
-		profileName = "default"
-	}
 
-	var credentialsFile = os.Getenv("AWS_CREDENTIAL_FILE")
-	if credentialsFile == "" {
-		var homeDir = os.Getenv("HOME")
-		if homeDir == "" {
-			err = errors.New("Could not get HOME")
-			return
-		}
-		credentialsFile = homeDir + "/.aws/credentials"
-	}
+// Defines the valid signers
+const (
+	V2Signature = iota
+)
 
-	file, err := ini.LoadFile(credentialsFile)
-	if err != nil {
-		err = errors.New("Couldn't parse AWS credentials file")
-		return
+var unreserved = make([]bool, 128)
+var hex = "0123456789ABCDEF"
+var b64 = base64.StdEncoding
+func init() {
+	// RFC3986
+	u := "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz01234567890-_.~"
+	for _, c := range u {
+		unreserved[c] = true
 	}
-
-	var profile = file[profileName]
-	if profile == nil {
-		err = errors.New("Couldn't find profile in AWS credentials file")
-		return
-	}
-
-	auth.AccessKey = profile["aws_access_key_id"]
-	auth.SecretKey = profile["aws_secret_access_key"]
-
-	if auth.AccessKey == "" {
-		err = errors.New("AWS_ACCESS_KEY_ID not found in environment in credentials file")
-	}
-	if auth.SecretKey == "" {
-		err = errors.New("AWS_SECRET_ACCESS_KEY not found in credentials file")
-	}
-	return
 }
-
-
-
-
-
-
-
-// Designates a signer interface suitable for signing AWS requests, params
-// should be appropriately encoded for the request before signing.
 type Signer interface {
 	Sign(method, path string, params map[string]string)
 }
