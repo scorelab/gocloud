@@ -33,7 +33,6 @@ func makeParams(action string) map[string]string {
 }
 
 
-
 type Filter struct {
 	m map[string][]string
 }
