@@ -1,4 +1,5 @@
 package aws
+
 // Region defines the URLs where AWS services may be accessed.
 type Region struct {
 	Name        string
