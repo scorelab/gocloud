@@ -18,7 +18,6 @@ type EC2 struct {
 	aws.Service
 }
 
-
 func New(auth aws.Auth, region aws.Region) *EC2 {
 	return NewWithClient(auth, region, aws.RetryingClient)
 }
@@ -27,7 +26,6 @@ func NewWithClient(auth aws.Auth, region aws.Region, client *http.Client) *EC2 {
 	s,_ :=aws.NewService(auth,aws.ServiceInfo{region.EC2Endpoint,0})
 	return &EC2{auth, region, client, 0, *s} //check 0
 }
-
 
 func (ec2 *EC2) query(params map[string]string, resp interface{}) error {
 	r, err := ec2.Service.Query("GET","/",params);
