@@ -7,6 +7,7 @@ import (
 	"time"
 	"github.com/scorelab/gocloud/lib/common/common"
 )
+
 var retryingTransport = &common.ResilientTransport{
 	Deadline: func() time.Time {
 		return time.Now().Add(5 * time.Second)
@@ -41,4 +42,3 @@ func ExpBackoff(try int) {
 	time.Sleep(100 * time.Millisecond *
 	time.Duration(math.Exp2(float64(try))))
 }
-
