@@ -48,7 +48,6 @@ func (ec2 *EC2) StartInstances(ids ...string) (resp *StartInstanceResp, err erro
 	return resp, nil
 }
 
-
 func (ec2 *EC2) RebootInstance(ids ... string) (resp *SimpleResp, err error) {
 	params := makeParams("RebootInstances")
 	addParamsList(params, "InstanceId", ids)
@@ -81,6 +80,3 @@ func (ec2 *EC2) TerminateInstances(instIds ... string) (resp *TerminateInstances
 	}
 	return
 }
-
-
-
