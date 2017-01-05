@@ -8,13 +8,11 @@ import (
 	"time"
 )
 
-
 // Defines the service endpoint and correct Signer implementation to use to sign requests for this endpoint
 type ServiceInfo struct {
 	Endpoint string
 	Signer   uint
 }
-
 
 func NewService(auth Auth, service ServiceInfo) (s *Service, err error) {
 	var signer Signer
@@ -30,8 +28,6 @@ func NewService(auth Auth, service ServiceInfo) (s *Service, err error) {
 	s = &Service{service: service, signer: signer}
 	return
 }
-
-
 
 type Service struct {
 	service ServiceInfo
@@ -56,9 +52,6 @@ func (s *Service) Query(method, path string, params map[string]string) (resp *ht
 	return
 }
 
-
-
-
 func (s *Service) BuildError(r *http.Response) error {
 	errors := ErrorResponse{}
 	xml.NewDecoder(r.Body).Decode(&errors)
@@ -72,7 +65,6 @@ func (s *Service) BuildError(r *http.Response) error {
 	return &err
 }
 
-
 func multimap(p map[string]string) url.Values {
 	q := make(url.Values, len(p))
 	for k, v := range p {
@@ -80,4 +72,3 @@ func multimap(p map[string]string) url.Values {
 	}
 	return q
 }
-
