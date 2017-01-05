@@ -6,7 +6,6 @@ import (
 	"encoding/xml"
 )
 
-
 // Error encapsulates an error returned by EC2.
 type Error struct {
 	StatusCode int
