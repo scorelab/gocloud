@@ -17,21 +17,17 @@ func clientToken() (string, error) {
 	return hex.EncodeToString(buf), nil
 }
 
-
-
 func addParamsList(params map[string]string, label string, ids []string) {
 	for i, id := range ids {
 		params[label+"."+strconv.Itoa(i+1)] = id
 	}
 }
 
-
 func makeParams(action string) map[string]string {
 	params := make(map[string]string)
 	params["Action"] = action
 	return params
 }
-
 
 type Filter struct {
 	m map[string][]string
@@ -64,4 +60,3 @@ func (f *Filter) addParams(params map[string]string) {
 		}
 	}
 }
-
