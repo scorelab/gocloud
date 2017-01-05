@@ -12,14 +12,11 @@ import (
 	"os"
 )
 
-
-
 type Auth struct {
 	AccessKey, SecretKey string
 	token                string
 	expiration           time.Time
 }
-
 
 func (a *Auth) Token() string {
 	if a.token == "" {
@@ -34,7 +31,6 @@ func (a *Auth) Token() string {
 func (a *Auth) Expiration() time.Time {
 	return a.expiration
 }
-
 
 func NewAuth(accessKey, secretKey, token string, expiration time.Time) *Auth {
 	return &Auth{
@@ -82,8 +78,6 @@ func EnvAuth() (auth Auth, err error) {
 	return
 }
 
-
-
 // Defines the valid signers
 const (
 	V2Signature = iota
@@ -99,6 +93,7 @@ func init() {
 		unreserved[c] = true
 	}
 }
+
 type Signer interface {
 	Sign(method, path string, params map[string]string)
 }
@@ -141,9 +136,6 @@ func (s *V2Signer) Sign(method, path string, params map[string]string) {
 	params["Signature"] = string(signature)
 }
 
-
-
-
 // Encode takes a string and URI-encodes it in a way suitable
 func Encode(s string) string {
 	encode := false
@@ -173,4 +165,3 @@ func Encode(s string) string {
 	}
 	return string(e[:ei])
 }
-
